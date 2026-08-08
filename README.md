@@ -1,5 +1,5 @@
-# File-Organiser
-A CLI File Organiser written in C#.
+# File-Organizer
+A CLI File Organizer written in C#.
 
 ## Usage
 Enter the folder path that you want the program to scan and sort files (defaults to `~/Downloads`).
