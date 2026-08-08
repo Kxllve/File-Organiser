@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Reflection.Metadata;
 
 namespace FileOrganiser
 {
@@ -26,15 +25,15 @@ namespace FileOrganiser
         }
         public static void SortFiles(string userDefinedPath)
         {
-            string[] folders = { "Documents", "Images", "Music", "Videos", "Compressed" };
+            string[] folders = ["Documents", "Images", "Music", "Videos", "Compressed"];
             int totalFilesMoved = 0;
-            
+
             // File format arrays
-            string[] fileFormatsDocuments = { ".txt", ".pdf", ".docx", ".psd", ".kra", ".aep", ".csp" };
-            string[] fileFormatsImages = { ".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg" };
-            string[] fileFormatsMusic = { ".mp3", ".wav", ".aac" };
-            string[] fileFormatsVideos = { ".mp4", ".mov", ".mkv", ".avi", ".webm" };
-            string[] fileFormatsCompressed = { ".zip", ".rar", ".7z", ".tar", ".tar.gz" };
+            string[] fileFormatsDocuments = [".txt", ".pdf", ".docx", ".psd", ".kra", ".aep", ".csp"];
+            string[] fileFormatsImages = [".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg"];
+            string[] fileFormatsMusic = [".mp3", ".wav", ".aac"];
+            string[] fileFormatsVideos = [".mp4", ".mov", ".mkv", ".avi", ".webm"];
+            string[] fileFormatsCompressed = [".zip", ".rar", ".7z", ".tar", ".tar.gz"];
 
             for (int i = 0; i < folders.Length; i++)
             {
@@ -82,9 +81,17 @@ namespace FileOrganiser
             foreach (string file in files)
             {
                 string fileName = file.Substring(sourcePath.Length + 1);
-                Console.WriteLine($"Moving {fileName} to {targetFolder}...");
-                File.Move(file, Path.Combine(targetFolder, fileName));
-                countFiles++;
+                string combinedPath = Path.Combine(targetFolder, fileName);
+                if (File.Exists($"{combinedPath}"))
+                {
+                    Console.WriteLine($"⚠ WARNING!: skipping {fileName} as it already exists in {targetFolder}.");
+                }
+                else
+                {
+                    Console.WriteLine($"Moving {fileName} to {targetFolder}...");
+                    File.Move(file, combinedPath);
+                    countFiles++;
+                }
             }
             return countFiles;
         }
