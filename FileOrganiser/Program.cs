@@ -8,20 +8,31 @@ namespace FileOrganiser
         public static void Main(string[] args)
         {
             var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string defaultPath = $"{home}/Downloads";
-
-            Console.WriteLine($"Please specify the folder to scan (default: {defaultPath}: ");
-            string userDefinedPath = Console.ReadLine();
+             string defaultPath = Path.Combine(home, "Downloads");
+                Console.WriteLine($"Please specify the folder to scan (default: {defaultPath}): ");
+                string userDefinedPath = Console.ReadLine();
 
             if (String.IsNullOrEmpty(userDefinedPath))
             {
                 userDefinedPath = defaultPath;
             }
 
+            if (!Directory.Exists(userDefinedPath))
+            {
+                throw new InvalidOperationException($"The path '{userDefinedPath}' does not exist or is not a valid directory.");
+            }
+
+            try
+            {
+                Directory.EnumerateFileSystemEntries(userDefinedPath).FirstOrDefault();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw new InvalidOperationException($"You don't have permission to read from '{userDefinedPath}'.");
+            }
+
             Console.WriteLine($"{userDefinedPath} will be used.");
-
             SortFiles(userDefinedPath);
-
         }
         public static void SortFiles(string userDefinedPath)
         {
